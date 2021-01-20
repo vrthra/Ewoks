@@ -177,16 +177,16 @@ init-grep: .dbgbench;
 rm-find:; $(MAKE) -C dbgbench.github.io/docker rm-find
 rm-grep:; $(MAKE) -C dbgbench.github.io/docker rm-grep
 
-prune-find:; sudo docker system prune --filter ancestor=falgebra/find || echo
-prune-grep:; sudo docker system prune --filter ancestor=falgebra/grep || echo
+prune-find:; sudo docker system prune --filter ancestor=ewok/find || echo
+prune-grep:; sudo docker system prune --filter ancestor=ewok/grep || echo
 
-ls-find:; @sudo docker ps -a --filter ancestor=falgebra/find --format 'table {{.Image}} {{.ID}} {{.Names}} {{.Status}}'
-ls-grep:; @sudo docker ps -a --filter ancestor=falgebra/grep --format 'table {{.Image}} {{.ID}} {{.Names}} {{.Status}}'
+ls-find:; @sudo docker ps -a --filter ancestor=ewok/find --format 'table {{.Image}} {{.ID}} {{.Names}} {{.Status}}'
+ls-grep:; @sudo docker ps -a --filter ancestor=ewok/grep --format 'table {{.Image}} {{.ID}} {{.Names}} {{.Status}}'
 
 artifact.tar.gz: Vagrantfile Makefile
-	rm -rf artifact && mkdir -p artifact/falgebra
+	rm -rf artifact && mkdir -p artifact/ewok
 	cp README.md artifact/README.txt
-	cp -r README.md lang src dbgbench.github.io .dbgbench Makefile Vagrantfile etc/jupyter_notebook_config.py artifact/falgebra
+	cp -r README.md lang src dbgbench.github.io .dbgbench Makefile Vagrantfile etc/jupyter_notebook_config.py artifact/ewok
 	cp -r Vagrantfile artifact/
 	tar -cf artifact1.tar artifact
 	gzip artifact1.tar
@@ -195,28 +195,28 @@ artifact.tar.gz: Vagrantfile Makefile
 
 
 # PACKAGING
-box-create: falgebra.box
-falgebra.box: artifact.tar.gz
+box-create: ewok.box
+ewok.box: artifact.tar.gz
 	cd artifact && vagrant up
-	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/falgebra.tar falgebra ; cd ~/; tar -xpf ~/falgebra.tar; rm -f ~/falgebra.tar'
-	cd artifact && vagrant ssh -c 'mkdir -p /home/vagrant/.jupyter; cp /vagrant/falgebra/jupyter_notebook_config.py /home/vagrant/.jupyter/jupyter_notebook_config.py'
-	cd artifact && vagrant ssh -c 'cd ~/falgebra && make dbgbench-init' # TODO: for final
-	cd artifact && vagrant package --output ../falgebra1.box --vagrantfile ../Vagrantfile.new
-	mv falgebra1.box falgebra.box
+	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/ewok.tar ewok ; cd ~/; tar -xpf ~/ewok.tar; rm -f ~/ewok.tar'
+	cd artifact && vagrant ssh -c 'mkdir -p /home/vagrant/.jupyter; cp /vagrant/ewok/jupyter_notebook_config.py /home/vagrant/.jupyter/jupyter_notebook_config.py'
+	cd artifact && vagrant ssh -c 'cd ~/ewok && make dbgbench-init' # TODO: for final
+	cd artifact && vagrant package --output ../ewok1.box --vagrantfile ../Vagrantfile.new
+	mv ewok1.box ewok.box
 
 box-hash:
-	md5sum falgebra.box
+	md5sum ewok.box
 
-box-add: falgebra.box
-	-vagrant destroy $$(vagrant global-status | grep falgebra | sed -e 's# .*##g')
-	rm -rf vtest && mkdir -p vtest && cp falgebra.box vtest
-	cd vtest && vagrant box add falgebra ./falgebra.box
-	cd vtest && vagrant init falgebra
+box-add: ewok.box
+	-vagrant destroy $$(vagrant global-status | grep ewok | sed -e 's# .*##g')
+	rm -rf vtest && mkdir -p vtest && cp ewok.box vtest
+	cd vtest && vagrant box add ewok ./ewok.box
+	cd vtest && vagrant init ewok
 	cd vtest && vagrant up
 
 box-status:
-	-vagrant global-status | grep falgebra
-	-vagrant box list | grep falgebra
+	-vagrant global-status | grep ewok
+	-vagrant box list | grep ewok
 
 box-remove1:
 	cd artifact; vagrant destroy
@@ -225,8 +225,8 @@ box-remove2:
 	cd vtest; vagrant destroy
 
 box-remove:
-	-vagrant destroy $$(vagrant global-status | grep falgebra | sed -e 's# .*##g')
-	vagrant box remove falgebra
+	-vagrant destroy $$(vagrant global-status | grep ewok | sed -e 's# .*##g')
+	vagrant box remove ewok
 
 show-ports:
 	 sudo netstat -ln --program | grep 8888
