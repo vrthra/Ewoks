@@ -67,7 +67,7 @@ leading `$` and the other lines indicate the expected output),
 
 ```bash
 $ du -ksh ewok.box
-2.1G  ewok.box
+7.1G  ewok.box
 ```
 
 and should have the following _md5_ checksum.
