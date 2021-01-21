@@ -46,6 +46,7 @@ def table1(args):
     for a in args:
         try:
             if '/recognize_' not in a: continue
+            if a[-1] == '_': continue
             valid_f_a, success_f_a = 0, 0
             valid_f_n, success_f_n = 0, 0
             with open(a) as f:
