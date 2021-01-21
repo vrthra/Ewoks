@@ -50,10 +50,12 @@ def table1(args):
             valid_f_n, success_f_n = 0, 0
             with open(a) as f:
                 for l in f.readlines():
-                    if 'Success:' in l:
-                        valid_f_a, success_f_a = [int(i) for i in l[len('Succes: '):].split('/')]
-                    elif 'Fail:' in l:
-                        valid_f_n, success_f_n = [int(i) for i in l[len('Fail: '):].split('/')]
+                    if 'Recognize Success:' in l:
+                        l = l.split('=')[0]
+                        valid_f_a, success_f_a = [int(i) for i in l[len('Recognize Succes: '):].split('/')]
+                    elif 'Recognize Fail:' in l:
+                        l = l.split('=')[0]
+                        valid_f_n, success_f_n = [int(i) for i in l[len('Recognize Fail: '):].split('/')]
                     else:
                         pass
             hdr = a.replace('recognize_','').replace('.log', '').replace('results/','')

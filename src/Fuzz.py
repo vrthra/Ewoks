@@ -4,6 +4,8 @@ import random
 import os
 import json
 
+MAX_LIMIT = 10000
+
 def fuzz_grammar(mgrammar):
     start = mgrammar['[start]']
     grammar = mgrammar['[grammar]']
