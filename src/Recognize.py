@@ -16,23 +16,33 @@ def main(grammar, bug_fn, predicate):
     success_count_neg = 0
     fail_count_total = 0
     fail_count_neg = 0
+    count_total = 0
 
     with open(input_file) as f:
         jsoninputs = f.readlines()
     for line in jsoninputs:
         res = json.loads(line)
         if res['res'] == 'PRes.invalid':
-            continue   
+            continue
         elif res['res'] == 'PRes.success':
             success_count_total += 1
             if not p.can_parse(res['src']):
+                # Cannot parse a failure successfully reproduced -- bad.
                 success_count_neg += 1
                 print('ERROR:', res)
         elif res['res'] == 'PRes.failed':
             fail_count_total += 1
             if p.can_parse(res['src']):
+                # Can parse as failure an input that was marked as failed to reproduce -- bad.
                 fail_count_neg += 1
         else:
             assert False
-    print('Success: %d/%d' % ((success_count_total - success_count_neg), success_count_total))
-    print('Fail: %d/%d' % ((fail_count_total - fail_count_neg), fail_count_total))
+        count_total += 1
+    print('Recognize Success: %d/%d = %f%%' % (
+        (success_count_total - success_count_neg),
+        success_count_total,
+        (success_count_total - success_count_neg) * 100.0 / success_count_total))
+    print('Recognize Fail: %d/%d = %f%%' % (
+        (fail_count_total - fail_count_neg),
+        fail_count_total,
+        (fail_count_total - fail_count_neg) * 100.0 / fail_count_total))

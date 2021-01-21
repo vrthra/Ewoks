@@ -25,6 +25,7 @@ Vagrant.configure("2") do |config|
     pip3 install pudb
     pip3 install sympy
     pip3 install rich
+    pip3 install psutil
 
     pip3 install jupyter_contrib_nbextensions
     pip3 install jupyter_nbextensions_configurator
@@ -46,10 +47,6 @@ Vagrant.configure("2") do |config|
     echo cd /home/vagrant/ewok >  /home/vagrant/starttests.sh
     echo make all >>  /home/vagrant/starttests.sh
     chmod +x /home/vagrant/starttests.sh
-
-    echo cd /home/vagrant/ewok >  /home/vagrant/showresults.sh
-    echo 'find results/*.json | grep -v log | while read i; do echo $i; python3 ./src/show_tree.py $i -minstring; echo ; done'  >>  /home/vagrant/showresults.sh
-    chmod +x /home/vagrant/showresults.sh
 
   SHELL
 end

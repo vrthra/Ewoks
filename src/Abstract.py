@@ -666,6 +666,43 @@ import signal
 import urllib
 import hashlib
 
+import psutil
+
+def get_children(pid):
+    if not psutil.pid_exists(pid): return []
+    p = psutil.Process(pid)
+    children = p.children(recursive=True)
+    return [child for child in children]
+
+def check_it(c):
+    pid = c.pid
+    with open('/tmp/checked.pids', 'a+') as f:
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            print('check-gone: ', str(pid), file=f)
+        except OSError:
+            print('check-killed: ', str(pid), file=f)
+        else:
+            print('check-exist: ', str(pid), c.name(), file=f)
+
+def kill_it(c):
+    pid = c.pid
+    with open('/tmp/killed.pids', 'a+') as f:
+        try:
+            os.kill(pid, 0)
+        except OSError:
+            print('killed: ', str(pid), file=f)
+        except ProcessLookupError:
+            print('not found: ', str(pid), file=f)
+        else:
+            print('not killed: ', str(pid), c.name(), file=f)
+
+def kill_all(pid):
+    pgid = os.getpgid(pid)
+    subprocess.call(['sudo', 'kill', '-TERM', "-%s" % str(pgid)])
+    subprocess.call(['sudo', 'kill', '-SIGKILL', "-%s" % str(pgid)])
+
 class O:
     def __init__(self, **keys): self.__dict__.update(keys)
     def __repr__(self): return str(self.__dict__)
@@ -687,20 +724,10 @@ def do(command, env=None, shell=False, log=False, **args):
         stdout = '' if stdout is None else stdout.decode('utf-8', 'ignore')
         return O(returncode=result.returncode, stdout=stdout, stderr=stderr)
     except subprocess.TimeoutExpired as e:
-        #try:
-        pid = result.pid
-        pgid = os.getpgid(pid)
         subprocess.call(['stty','sane'])
         subprocess.call(['tput','rs1'])
-        subprocess.call(['sudo', 'kill', '-TERM', "-%s" % str(pgid)])
+        kill_all(result.pid)
         subprocess.call(['stty','sane'])
         subprocess.call(['tput','rs1'])
-            #os.killpg(os.getpgid(pid), signal.SIGTERM)
-            #result.kill()
-        #except PermissionError:
-        #    subprocess.call(['stty','sane'])
-        #    subprocess.call(['tput','rs1'])
-        #    print('Permission Error, use SUDO', file=sys.stderr)
-        #    pass
     return O(returncode=255, stdout='TIMEOUT', stderr='')
 

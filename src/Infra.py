@@ -2,6 +2,7 @@ import Abstract as A
 import SimpleDDSet as S
 import FAlgebra as F
 import os
+import subprocess
 import json
 import tempfile
 import hashlib
@@ -22,7 +23,36 @@ def extract(o):
     s = o.stdout.strip()
     return "./" +  s.split('/')[1]
 
+
+def docker_gc(my_vars):
+    if DOCKER is None: return
+    if DOCKER not in my_vars: return
+    my_docker = DOCKER
+    res = A.do(('sudo docker top %s -eopid,ppid,cmd' % my_docker).split(' '))
+    parent_pid = None
+    startup_pid = None
+    lines = res.stdout.split('\n')
+    for line in lines:
+        if 'startup.sh' in line:
+            pid,ppid,*cmd = line.split()
+            parent_pid = ppid
+            startup_pid = pid
+            break
+    assert startup_pid is not None
+    assert startup_pid is not None
+    for line in lines:
+        vals = line.split()
+        if len(vals) < 3: continue
+        pid,ppid,*cmd = vals
+        if ppid != parent_pid: continue
+        if pid == startup_pid: continue
+        try:
+            subprocess.call(['sudo', 'kill', '-SIGKILL', "-%s" % str(pid)])
+        except:
+            pass
+
 def find():
+    docker_gc(CACHE_FIND)
     if DOCKER in CACHE_FIND: return CACHE_FIND[DOCKER]
     o = A.do(('sudo docker exec -it %s bash -c'% DOCKER).split(' ') + ['find . | grep %s' % DOCKER])
     if o == 'TIMEOUT': raise Exception('TIMEDOUT tyring to find docker id')
@@ -30,6 +60,7 @@ def find():
     return CACHE_FIND[DOCKER]
 
 def grep():
+    docker_gc(CACHE_GREP)
     if DOCKER in CACHE_GREP: return CACHE_GREP[DOCKER]
     o = A.do(('sudo docker exec -it %s bash -c' % DOCKER).split(' ') + ['find . | grep %s' % DOCKER])
     if o == 'TIMEOUT': raise Exception('TIMEDOUT tyring to find docker id')
