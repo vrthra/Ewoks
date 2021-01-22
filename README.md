@@ -279,6 +279,11 @@ fragment using the specialized evocative grammar generated. The second column
 contains what percentage of inputs during reduction that caused the failure
 that was rejected using the negated evocative grammar.
 
+**NOTE** You do not have to wait until the end of experiments to see the
+results as they are produced. You can take a new shell using `vagrant ssh`
+and execute both `table.sh` and `table2.sh` and you can see the current
+results.
+
 ## How is the Jupyter notebook organized
 
 The Jupyter notebook provided has complete documentation of the entire
