@@ -48,5 +48,10 @@ Vagrant.configure("2") do |config|
     echo make all >>  /home/vagrant/starttests.sh
     chmod +x /home/vagrant/starttests.sh
 
+    echo cd /home/vagrant/ewok >  /home/vagrant/compile_notebook.sh
+    echo jupyter nbconvert --to notebook --execute src/FAlgebra.ipynb --ExecutePreprocessor.timeout=36000 --output=FAlgebra_.ipynb >>  /home/vagrant/compile_notebook.sh
+    echo jupyter nbconvert --to html src/FAlgebra_.ipynb --output=~/FAlgebra.html >>  /home/vagrant/compile_notebook.sh
+    chmod +x /home/vagrant/compile_notebook.sh
+
   SHELL
 end

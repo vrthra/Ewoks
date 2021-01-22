@@ -279,7 +279,7 @@ c.NotebookApp.ip = '*'
 #  
 #  The string should be of the form type:salt:hashed-password.
 # ewok
-c.NotebookApp.password = 'sha1:cfd85c86a739:b14a96df5fc8881742ec09fb2d2842d288880cd1'
+# c.NotebookApp.password = 'sha1:cfd85c86a739:b14a96df5fc8881742ec09fb2d2842d288880cd1'
 
 ## Forces users to use a password for the Notebook server. This is useful in a
 #  multi user environment, for instance when everybody in the LAN can access each
@@ -287,7 +287,7 @@ c.NotebookApp.password = 'sha1:cfd85c86a739:b14a96df5fc8881742ec09fb2d2842d28888
 #  
 #  In such a case, server the notebook server on localhost is not secure since
 #  any user can connect to the notebook server via ssh.
-#c.NotebookApp.password_required = False
+c.NotebookApp.password_required = False
 
 ## The port the notebook server will listen on.
 #c.NotebookApp.port = 8888

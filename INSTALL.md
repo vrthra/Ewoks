@@ -56,7 +56,7 @@ It contains the following files
 
 ```bash
 vm$ ls
-ewok  startjupyter.sh  starttests.sh  table1.sh  table2.sh
+ewok  startjupyter.sh  starttests.sh  compile_notebook.sh table1.sh  table2.sh
 ```
 
 You can verify the completeness of the installation by invoking Jupyter viewer

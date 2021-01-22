@@ -140,7 +140,7 @@ Swap:             1           0           1
 vm$ pwd
 /home/vagrant
 vm$ ls
-ewok  startjupyter.sh  starttests.sh  table1.sh  table2.sh
+ewok  startjupyter.sh  starttests.sh compile_notebook.sh table1.sh  table2.sh
 ```
 
 The following are the important files
@@ -153,6 +153,7 @@ The following are the important files
 | tables2.sh                   | CLI for viewing the results from recognizing experiments. |
 | ewok/src/                    | The main _ewogram_ algorithm implementation. |
 | ewok/src/FAlgebra.ipynb      | The detailed _ewogram_ notebook which contains explanations in _Python_. |
+| compile_notebook.sh          | Execute and convert the _ewogram_ notebook to HTML for offline viewing (non-interactive) |
 
 The most important file here is `ewok/src/FAlgebra.ipynb` which is the
 Jupyter notebook that contains the complete algorithm explained and worked out
@@ -164,7 +165,25 @@ It can also be viewed (read only) directly using the Github link
 
 ### Viewing the Jupyter notebook
 
-From within your VM shell, do the following:
+**IMPORTANT**: By default, the notebook is set to password less login
+If you prefer to enable password, before starting the Jupyter notebook, modify
+`ewok/jupyter_notebook_config.py` and change the following lines as given below.
+
+```
+## Hashed password to use for web authentication.
+#  
+#  To generate, type in a python/IPython shell:
+#  
+#    from notebook.auth import passwd; passwd()
+#  
+#  The string should be of the form type:salt:hashed-password.
+# ewok
+c.NotebookApp.password = 'sha1:cfd85c86a739:b14a96df5fc8881742ec09fb2d2842d288880cd1'
+…
+c.NotebookApp.password_required = True
+```
+
+To start the Jupyter notebook, From within your VM shell, do the following:
 
 ```bash
 vm$ ./startjupyter.sh
@@ -173,7 +192,8 @@ vm$ ./startjupyter.sh
 ```
 
 Copy and paste the last line in the host browser. The port `8888` is forwarded
-to the host. The password is `abc123!`.
+to the host.
+
 Click the [src](http://127.0.0.1:8888/tree/src) link from the browser and within
 that folder, click the [FAlgebra.ipynb](http://127.0.0.1:8888/notebooks/src/FAlgebra.ipynb)
 link. This will let you see the complete set of examples as well as the
@@ -229,9 +249,18 @@ Similarly, the Table 2 can be created using the following command
 
 ```bash
 vm$ ./table2.sh 
-Bug                  |       xx.x% of          F |       xx.x% of      not F
+
 clojure_2092         |      76.82% of        285 |      99.01% of        100
 clojure_2345         |      75.14% of        266 |      98.21% of         55
+clojure_2450         |      96.42% of        647 |      99.63% of        267
+clojure_2473         |      96.29% of        701 |      98.31% of         58
+clojure_2518         |      40.00% of          4 |      98.80% of         82
+clojure_2521         |      76.14% of        469 |      99.11% of        111
+closure_2808         |     100.00% of         64 |      92.59% of         25
+closure_2842         |       1.51% of          4 |      98.86% of        173
+closure_2937         |      96.82% of       1125 |      94.12% of         32
+closure_3178         |      94.05% of        617 |      99.01% of        100
+closure_3379         |      97.69% of        508 |      77.78% of         21
 find_07b941b1        |      92.68% of        190 |     100.00% of          7
 find_93623752        |      99.48% of        190 |     100.00% of          7
 find_c8491c11        |      98.44% of        189 |     100.00% of          8
@@ -269,56 +298,147 @@ i<https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipyn
 ### Algebra
 
 1.1 What
+
+Explanation of what we are trying to do with ewoks
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#What>
+
 1.2 Why
+
+Explanation of why we want to do it
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Why>
+
 1.3 How
+
+A very high level outline 
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#How>
+
 1.4 How is it done
+
+A slightly more detailed outline
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#How-is-it-done?>
+
 1.5 Limitations
+
+The limitations of our approach
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Limitations>
+
 1.6 Magick
+
+Jupyter notebook specific hooks so that it is comfortable to use. Ignore these.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Magick>
+
 1.7 Fault Patterns
+
+A complete explanation of the _evocative patterns_ including the algorithms that
+show how it is extracted. This section also contains a few generic common
+library functions for later use.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Fault-Patterns>
+
 1.8 Inserting a Fault
+
+Given a fault, and the failure causing fragment, how do we extract the fragment
+as the _evocative patter_, and then insert this evocative pattern into the base
+grammar thus specializing it.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Inserting-a-fault>
+
 1.9 Reconstruct
+
+During the fault insertion,  we introduce a number of new keys into the grammar.
+This step produces the definitions for these keys from the existing keys in the
+grammar. This step is needed for every operation.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Reconstruct>
+
 2.0 Conjunction
+
+Producing a conjunction `(e1 & e2)` of two _evocative expressions_.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Conjunction>
+
 2.1 Disjunction
+
+Producing a disjunction `(e1 | e2)` of two _evocative expressions_.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Disjunction>
+
 2.2 Negation
+
+Producing the negation not(e) of an _evocative expression_. Negation is used
+with conjunction to produce difference. That is, `e1 - e2 == e1 & (-e2)`
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Negation-(self)>
+
 2.3 Difference
+
+Use the negation to produce difference (for example, see experiments).
+Please ignore partial orders.
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Difference>
 
 ### Experiment
 
 2.1 Fault A
+
+The evocative pattern is: `((<expr>))`
+
+We also provide a negation (not A).
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Fault-A-(exactly-1)>
 
 2.2 Fault B
+
+The evocative pattern is: `<term> + <term>`
+
+We also provide a negation (not B).
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Fault-B>
 
 2.3 Fault C
+
+The evocative pattern is: `<factor> / 0`
+
+We also provide a negation (not C).
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#Fault-C>
 
 2.4 Conjunction
+
+Given: `A & B`, `A & C`, `B & C`
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#A-&-B>
 
 2.5 Disjunction
+
+Given: `A | B`, `A | C`, `B | C`
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#A-|-B>
 
 2.6 Negation
+
+Given: `A - B`, `A - C`, `B - C`
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#A---B>
 
 2.7 More Complex
+
+Given: `A & B & C`, `A | B | C`, ` A & B | C`
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#More>
 
 2.8 JSON
+
+Describes the two examples in the paper -- null key-value `<string>:null`, its negation, 
+empty key `"":<element>`, and their conjunction.
+
+
 <https://nbviewer.jupyter.org/github/vrthra/Ewoks/blob/master/src/FAlgebra.ipynb#JSON>
 
 
