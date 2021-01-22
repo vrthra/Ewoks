@@ -14,7 +14,7 @@ we how our artifact satisfies each.
 The artifact is available both as a virtual machine and also under a public
 repository <https://github.com/vrthra/ewoks> which also contains
 instructions for building of the complete virtual machine package. Further,
-the DOI for the VM is 10.5281/zenodo.4456296
+the DOI for the VM is 10.5281/zenodo.4455545.
 
 ### Functional
 
@@ -26,7 +26,7 @@ the DOI for the VM is 10.5281/zenodo.4456296
    show how it can be obtained, and results can be evaluated.
 
 3. The artifact is complete in that the complete virtual machine is available
-   as a vagrant box at https://zenodo.org/record/4456296 (7.6 GB download)
+   as a vagrant box at https://zenodo.org/record/4455545 (7.6 GB download)
 
 4. The artifact is exercisable as we show how to run the experiments and
    extract results that have one to one correspondence with the tables in the
