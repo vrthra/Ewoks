@@ -1,7 +1,7 @@
 # INSTALLATION
 
 We assume that you have downloaded the
-[ewok.box](https://zenodo.org/record/4455546)
+[ewok.box](https://zenodo.org/record/4456296)
 as described in the README.md
 
 This file is a very basic set of installation instructions. For detailed
@@ -18,7 +18,7 @@ The _md5_ checksum.
 
 ```bash
 $ md5sum ewok.box
-2aecab1ae5472a4cb5197ee40e0bc761  ewok.box
+1185033617d029143cf9ab331ab48cf4  ewok.box
 ```
 
 The installation requires [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/)

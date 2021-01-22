@@ -6,7 +6,7 @@
 Our submission is both a tool that implements the algorithm given in the paper
 _Input Algebras_, as well as the Jupyter notebook that explains the algorithm,
 and the experiments with the tool. You can obtain the Vagrant VM image from
-<https://doi.org/10.5281/zenodo.4455546>.
+<https://doi.org/10.5281/zenodo.4456296>.
 which contains the complete artifacts necessary to reproduce our experiments.
 We describe the process of invoking the virtual machine below.
 
@@ -23,7 +23,7 @@ non-interactive version hosted at Github is accessible [from this link](https://
 If you are checking out the original repository from https://github.com/vrthra/ewoks
 and want to rebuild this vagrant box, then, after checking out, simply execute
 `make box-create` in the root directory. **This is not necessary if you are
-directly downloading the vagrant box** from <https://doi.org/10.5281/zenodo.4455546>
+directly downloading the vagrant box** from <https://doi.org/10.5281/zenodo.4456296>
 
 ```bash
 $ make box-create
@@ -59,7 +59,7 @@ local port 8888 to the host machine.
 
 Next, please download the vagrant box from the following link:
 
-<https://doi.org/10.5281/zenodo.4455546>.
+<https://doi.org/10.5281/zenodo.4456296>.
 
 This produces a file called `ewok.box` which is 7.1 GB in size
 (the commands in the host system are indicated by
@@ -74,7 +74,7 @@ and should have the following _md5_ checksum.
 
 ```bash
 $ md5sum ewok.box
-2aecab1ae5472a4cb5197ee40e0bc761 ewok.box
+1185033617d029143cf9ab331ab48cf4 ewok.box
 ```
 
 #### Importing the box
