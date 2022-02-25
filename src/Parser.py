@@ -14,6 +14,8 @@ def tree_to_string(node):
     else:
         return ''.join([tree_to_string(c) for c in children])
 
+RE_NONTERMINAL = re.compile(r'(<[^<> ]*>)')
+
 START_SYMBOL = '<start>'
 
 SAMPLE_GRAMMAR = {
