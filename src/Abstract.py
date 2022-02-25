@@ -514,7 +514,7 @@ def isolation(tree, grammar, predicate, max_checks):
             elif p[1] == St.unverified:
                 unverified.append(p)
             else:
-                assert false
+                assert False
     print('abstract paths:', len(verified))
     new_tree = mark_verified_abstract(tree, [p[0] for p in verified])
     # now change everythign else to False
